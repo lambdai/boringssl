@@ -171,9 +171,10 @@ struct timeval;
 extern "C" {
 #endif
 
+// Changes start here.
 
 // SSL implementation.
-
+OPENSSL_EXPORT void SSL_foo();
 
 // SSL contexts.
 //
@@ -4930,8 +4931,18 @@ OPENSSL_EXPORT int SSL_is_tls13_downgrade(const SSL *ssl);
 
 extern "C++" {
 
+#include <vector>
+
 BSSL_NAMESPACE_BEGIN
 
+
+class SymmetricInfo {
+public:
+SymmetricInfo(const SSL* ssl, int direction);
+
+std::vector<uint8_t> key_;
+std::vector<uint8_t> iv_;
+};
 BORINGSSL_MAKE_DELETER(SSL, SSL_free)
 BORINGSSL_MAKE_DELETER(SSL_CTX, SSL_CTX_free)
 BORINGSSL_MAKE_UP_REF(SSL_CTX, SSL_CTX_up_ref)
@@ -5050,6 +5061,7 @@ OPENSSL_EXPORT bool SSL_apply_handback(SSL *ssl, Span<const uint8_t> handback);
 OPENSSL_EXPORT bool SSL_get_traffic_secrets(
     const SSL *ssl, Span<const uint8_t> *out_read_traffic_secret,
     Span<const uint8_t> *out_write_traffic_secret);
+
 
 BSSL_NAMESPACE_END
 

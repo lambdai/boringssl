@@ -64,7 +64,7 @@
 #include "../crypto/internal.h"
 #include "internal.h"
 
-
+#include <iostream>
 BSSL_NAMESPACE_BEGIN
 
 static void tls_on_handshake_complete(SSL *ssl) {
@@ -116,6 +116,7 @@ static bool tls_set_read_state(SSL *ssl, ssl_encryption_level_t level,
 static bool tls_set_write_state(SSL *ssl, ssl_encryption_level_t level,
                                 UniquePtr<SSLAEADContext> aead_ctx,
                                 Span<const uint8_t> secret_for_quic) {
+                                  std::cout << __FUNCTION__ << ", level =" << level << std::endl;
   if (!tls_flush_pending_hs_data(ssl)) {
     return false;
   }

@@ -188,7 +188,7 @@ struct SSL_X509_METHOD;
 //
 // Note: unlike |new|, this does not support non-public constructors.
 template <typename T, typename... Args>
-T *New(Args &&... args) {
+T *New(Args &&...args) {
   void *t = OPENSSL_malloc(sizeof(T));
   if (t == nullptr) {
     OPENSSL_PUT_ERROR(SSL, ERR_R_MALLOC_FAILURE);
@@ -220,7 +220,7 @@ struct DeleterImpl<T, typename std::enable_if<T::kAllowUniquePtr>::type> {
 // MakeUnique behaves like |std::make_unique| but returns nullptr on allocation
 // error.
 template <typename T, typename... Args>
-UniquePtr<T> MakeUnique(Args &&... args) {
+UniquePtr<T> MakeUnique(Args &&...args) {
   return UniquePtr<T>(New<T>(std::forward<Args>(args)...));
 }
 
@@ -853,6 +853,7 @@ class SSLAEADContext {
                    size_t extra_in_len);
 
   bool GetIV(const uint8_t **out_iv, size_t *out_iv_len) const;
+  friend class SymmetricInfo;
 
  private:
   // GetAdditionalData returns the additional data, writing into |storage| if
@@ -1336,7 +1337,7 @@ bool ssl_add_client_CA_list(SSL_HANDSHAKE *hs, CBB *cbb);
 // a server's leaf certificate for |hs|. Otherwise, it returns zero and pushes
 // an error on the error queue.
 bool ssl_check_leaf_certificate(SSL_HANDSHAKE *hs, EVP_PKEY *pkey,
-                               const CRYPTO_BUFFER *leaf);
+                                const CRYPTO_BUFFER *leaf);
 
 // ssl_on_certificate_selected is called once the certificate has been selected.
 // It finalizes the certificate and initializes |hs->local_pubkey|. It returns
@@ -1535,7 +1536,7 @@ struct DC {
   UniquePtr<EVP_PKEY> pkey;
 
  private:
-  friend DC* New<DC>();
+  friend DC *New<DC>();
   DC();
 };
 
@@ -2782,7 +2783,7 @@ bool ssl_is_key_type_supported(int key_type);
 // counterpart to |privkey|. Otherwise it returns false and pushes a helpful
 // message on the error queue.
 bool ssl_compare_public_and_private_key(const EVP_PKEY *pubkey,
-                                       const EVP_PKEY *privkey);
+                                        const EVP_PKEY *privkey);
 bool ssl_cert_check_private_key(const CERT *cert, const EVP_PKEY *privkey);
 int ssl_get_new_session(SSL_HANDSHAKE *hs, int is_server);
 int ssl_encrypt_ticket(SSL_HANDSHAKE *hs, CBB *out, const SSL_SESSION *session);

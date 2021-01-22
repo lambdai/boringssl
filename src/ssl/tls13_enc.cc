@@ -30,6 +30,9 @@
 #include "../crypto/internal.h"
 #include "internal.h"
 
+#include <iostream>
+#include <iomanip>
+
 
 BSSL_NAMESPACE_BEGIN
 
@@ -178,6 +181,19 @@ bool tls13_set_traffic_key(SSL *ssl, enum ssl_encryption_level_t level,
                            {})) {
       return false;
     }
+
+    std::cout << "tls 13 key: len = " << key.size() << ", ";
+    for (const auto k: key) {
+      std::cout << std::hex << std::setfill ('0') << std::setw(2) << static_cast<int>(k) ; 
+    }
+    std::cout << std::dec << std::setw(1) << std::endl;   
+
+    std::cout << "tls 13 iv: " << iv.size() << ", ";;
+    for (const auto k: iv) {
+      std::cout << std::hex << std::setfill ('0') << std::setw(2) << static_cast<int>(k) ; 
+    }
+
+    std::cout << std::dec << std::setw(1) << std::endl;   
 
     traffic_aead = SSLAEADContext::Create(direction, session->ssl_version,
                                           SSL_is_dtls(ssl), session->cipher,

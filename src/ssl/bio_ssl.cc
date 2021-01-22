@@ -11,6 +11,10 @@
 
 #include <openssl/bio.h>
 
+#include <iostream>
+#include <vector>
+#include <iomanip>
+
 
 static SSL *get_ssl(BIO *bio) {
   return reinterpret_cast<SSL *>(bio->ptr);

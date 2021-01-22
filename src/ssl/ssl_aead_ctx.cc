@@ -24,6 +24,8 @@
 #include "../crypto/internal.h"
 #include "internal.h"
 
+#include <iostream>
+#include <iomanip>
 
 #if defined(BORINGSSL_UNSAFE_FUZZER_MODE)
 #define FUZZER_MODE true
@@ -57,6 +59,11 @@ UniquePtr<SSLAEADContext> SSLAEADContext::Create(
     enum evp_aead_direction_t direction, uint16_t version, bool is_dtls,
     const SSL_CIPHER *cipher, Span<const uint8_t> enc_key,
     Span<const uint8_t> mac_key, Span<const uint8_t> fixed_iv) {
+    std::cout << "in " << __FUNCTION__ << ", enc_key = ";
+    for (const auto k: enc_key) {
+      std::cout << std::hex << std::setw(2) << static_cast<int>(k) << " "; 
+    }
+    std::cout << std::endl;    
   const EVP_AEAD *aead;
   uint16_t protocol_version;
   size_t expected_mac_key_len, expected_fixed_iv_len;
